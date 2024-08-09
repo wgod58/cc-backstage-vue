@@ -4,14 +4,58 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <h1>Push Test</h1>
-  </header>
-
-  <RouterView />
+    <table class="table">
+              <thead>
+                <tr>
+                  <th>編碼</th>
+                  <th>大頭貼</th>
+                  <th>姓名</th>
+                  <th>電話</th>
+                  <th>身分證</th>
+                  <th>註冊時間</th>
+                  <th>星星(圖案)</th>
+                </tr>
+              </thead>
+              <tbody class="member_list">
+                <tr>
+                  <th>1</th>
+                  <td>Mark</td>
+                  <td>0912345678</td>
+                  <td>A123456789</td>
+                  <td>2024-08-09</td>
+                  <td>star</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>Mark</td>
+                  <td>0912345678</td>
+                  <td>A123456789</td>
+                  <td>2024-08-09</td>
+                  <td>star</td>
+                </tr>
+                <tr>
+                  <th>3</th>
+                  <td>Mark</td>
+                  <td>0912345678</td>
+                  <td>A123456789</td>
+                  <td>2024-08-09</td>
+                  <td>star</td>
+                </tr>
+              </tbody>
+            </table>
+  <!-- <RouterView /> -->
 </template>
 
 <style scoped>
+.table {
+  width: 50vw
+}
+.table *{
+  border: 1px solid white;
+}
+.member_list {
+  border: 1px solid white;
+}
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -20,31 +64,6 @@ header {
 .logo {
   display: block;
   margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
 }
 
 @media (min-width: 1024px) {
@@ -62,15 +81,6 @@ nav a:first-of-type {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>
