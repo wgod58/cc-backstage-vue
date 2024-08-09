@@ -1,6 +1,4 @@
 steps:
-  - name: "bash"
-    args: ["mv", ".env.test", ".env"]
   # install yarn
   - name: node:18.12.0
     entrypoint: yarn
