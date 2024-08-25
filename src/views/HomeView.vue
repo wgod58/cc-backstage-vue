@@ -1,9 +1,12 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import { RouterView } from 'vue-router';
+import Sidebar from '../components/Sidebar.vue'
 </script>
 
 <template>
+  <Sidebar></Sidebar>
+  <RouterView></RouterView>
   <main>
-    <TheWelcome />
+    <h1>123</h1>
   </main>
 </template>
