@@ -10,7 +10,7 @@
       @open="handleOpen"
       @close="handleClose"
     >
-      <el-sub-menu index="1">
+      <!-- <el-sub-menu index="1">
         <template #title>
           <el-icon><location /></el-icon>
           <span>Navigator One</span>
@@ -27,19 +27,28 @@
           <template #title><span>item four</span></template>
           <el-menu-item index="1-4-1">item one</el-menu-item>
         </el-sub-menu>
-      </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>Navigator Two</template>
+      </el-sub-menu> -->
+      <RouterLink to="/">
+      <el-menu-item index="1">
+        <el-icon><Avatar /></el-icon>
+        <template #title>ClientsData</template>
       </el-menu-item>
-      <el-menu-item index="3" disabled>
+    </RouterLink>
+
+      <RouterLink to="/report">
+      <el-menu-item index="2">
+        <el-icon><DataLine /></el-icon>
+        <template #title>CostReport</template>
+      </el-menu-item>
+    </RouterLink>
+      <!-- <el-menu-item index="3" disabled>
         <el-icon><document /></el-icon>
         <template #title>Navigator Three</template>
       </el-menu-item>
       <el-menu-item index="4">
         <el-icon><setting /></el-icon>
         <template #title>Navigator Four</template>
-      </el-menu-item>
+      </el-menu-item> -->
     </el-menu>
   </template>
   
@@ -51,6 +60,7 @@
     Location,
     Setting,
   } from '@element-plus/icons-vue'
+import { RouterLink } from 'vue-router';
   
   const isCollapse = ref(true)
   const handleOpen = (key: string, keyPath: string[]) => {
