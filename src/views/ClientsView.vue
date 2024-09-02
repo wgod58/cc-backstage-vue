@@ -1,15 +1,19 @@
 <template>
   switch parent border: <el-switch v-model="parentBorder" /> switch child
   border: <el-switch v-model="childBorder" />
-  <el-table :data="memberData" :border="parentBorder" style="width: 100%">
+  <Dialog ></Dialog>
+  <!-- <Dialog :visible="dialogFormVisible" @submit="createClient" @close="dialogFormVisible = false"></Dialog> -->
+  <el-table :data="memberData" :border="parentBorder" style="width: 100%" @expand-change="handleExpandChange">
     <el-table-column type="expand">
       <template #default="props">
+        <el-button type="primary" round>更新資料</el-button>
+        <el-button type="danger" round @click="deleteClient(props.row.id)">刪除用戶</el-button>
         <div m="4">
-          <p m="t-0 b-2">State: {{ props.row.state }}</p>
-          <p m="t-0 b-2">City: {{ props.row.city }}</p>
+          <!-- <p m="t-0 b-2">State: {{ props.row.state }}</p>
+          <p m="t-0 b-2">City: {{ props.row.city }}</p>   
           <p m="t-0 b-2">Address: {{ props.row.address }}</p>
           <p m="t-0 b-2">Zip: {{ props.row.zip }}</p>
-          <h3>Family</h3>
+          <h3>Family</h3> -->
           <el-table :data="props.row.family" :border="childBorder">
             <el-table-column label="cost" prop="cost" />
             <el-table-column label="createdAt" prop="createdAt" />
@@ -38,14 +42,21 @@
 
 <script setup>
 import { ref } from 'vue'
+import Swal from "sweetalert2";
 import axios from 'axios';
-const API_URL = 'https://metadata.moaifamily.io/clients?page=1&count=10'
+import Dialog from '../components/Dialog.vue'
+const API_URL_CLIENT_DATA = 'https://metadata.moaifamily.io/clients?page=1&count=10'
+const API_URL_CLIENT_COST = 'https://metadata.moaifamily.io/clients?page=1&count=10'
 const parentBorder = ref(false)
 const childBorder = ref(false)
 const memberData = ref([])
 const createdAt = ref()
 const updatedAt = ref()
-
+const handleExpandChange = (row, expandedRows) => {
+  console.log("expand")
+  console.log(row)
+  console.log(expandedRows)
+}
 function convertUTCDateToLocalDate(utcDateStr) {
   const date = new Date(utcDateStr);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}
@@ -54,7 +65,7 @@ function convertUTCDateToLocalDate(utcDateStr) {
 }
 const loadMember = async () => {
   try {
-    const response = await axios.get(API_URL)
+    const response = await axios.get(API_URL_CLIENT_DATA)
     for (let i = 0; i < response.data.rows.length; i++) {
       response.data.rows[i].createdAt = convertUTCDateToLocalDate(response.data.rows[i].createdAt)
       response.data.rows[i].updatedAt = convertUTCDateToLocalDate(response.data.rows[i].updatedAt)
@@ -65,7 +76,53 @@ const loadMember = async () => {
     console.error("Error Fetching : ", error)
   }
 }
+
+const ClientCost = ref([])
+const fetchingClientCosts = async () => {
+  try {
+    const response = await axios.get(API_URL_CLIENT_COST)
+    ClientCost.value = response.data.rows;
+    console.log(response.data.rows)
+  } catch (error) {
+    console.error("Error Fetching : ", error)
+  }
+}
 loadMember();
+
+
+const deleteClient = async (id) => {
+  try {
+    const result = await Swal.fire({
+      title: "確定要刪除嗎?",
+      showDenyButton: true,
+      confirmButtonText: "確定",
+      denyButtonText: `取消`,
+    });
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: 'Loading',
+        text: '請稍候',
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      })
+      const response = await axios.delete(`https://metadata.moaifamily.io/client/${id}`);
+      console.log(response);
+      loadMember();
+      Swal.close();
+    } else if (result.isDenied) {
+      Swal.close();
+    }
+  } catch (error) {
+    console.error("Error deleting client:", error);
+  }
+};
+
+const createClient = async ()=>{
+  console.log("createClient")
+}
+
+
 const tableData = [
   {
     date: '2016-05-03',
