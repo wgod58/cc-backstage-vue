@@ -45,7 +45,8 @@ import { ref } from 'vue'
 import Swal from "sweetalert2";
 import axios from 'axios';
 import Dialog from '../components/Dialog.vue'
-const API_URL_CLIENT_DATA = 'https://metadata.moaifamily.io/clients?page=1&count=10'
+// const API_URL_CLIENT_DATA = 'https://metadata.moaifamily.io/clients?page=1&count=10'
+const API_URL_CLIENT_DATA = 'https://metadata.moaifamily.io/clients?page=1&count=100'
 const API_URL_CLIENT_COST = 'https://metadata.moaifamily.io/clients?page=1&count=10'
 const parentBorder = ref(false)
 const childBorder = ref(false)
