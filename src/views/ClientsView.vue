@@ -17,11 +17,11 @@
         <el-button type="primary" round>更新資料</el-button>
         <el-button type="danger" round @click="deleteClient(props.row.id)">刪除用戶</el-button>
         <div m="4">
-          <p m="t-0 b-2">State: {{ props.row.state }}</p>
-          <p m="t-0 b-2">City: {{ props.row.city }}</p>
+          <!-- <p m="t-0 b-2">State: {{ props.row.state }}</p>
+          <p m="t-0 b-2">City: {{ props.row.city }}</p>   
           <p m="t-0 b-2">Address: {{ props.row.address }}</p>
           <p m="t-0 b-2">Zip: {{ props.row.zip }}</p>
-          <h3>Family</h3>
+          <h3>Family</h3> -->
           <el-table :data="props.row.family" :border="childBorder">
             <el-table-column label="cost" prop="cost" />
             <el-table-column label="createdAt" prop="createdAt" />
@@ -55,6 +55,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import Swal from "sweetalert2";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Dialog from '@/components/Dialog.vue';
