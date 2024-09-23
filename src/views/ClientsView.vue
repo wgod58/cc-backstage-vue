@@ -1,7 +1,8 @@
 <template>
   switch parent border: <el-switch v-model="parentBorder" /> switch child
   border: <el-switch v-model="childBorder" />
-  <Dialog :visible="dialogVisible" @update:visible="dialogVisible = $event" @submit="createClient"></Dialog>
+  <CreateMemberDialog :visible="dialogVisible" @update:visible="dialogVisible = $event" @submit="createClient">
+  </CreateMemberDialog>
   <div class="pagination-control">
     <el-select v-model="loadCount" placeholder="每頁顯示" @change="handlePageSizeChange">
       <el-option v-for="item in pageSizes" :key="item" :label="`${item} 筆`" :value="item" />
@@ -14,7 +15,11 @@
   <el-table :data="memberData" :border="parentBorder" style="width: 100%">
     <el-table-column type="expand">
       <template #default="props">
-        <el-button type="primary" round>更新資料</el-button>
+        <UpdateMemberDialog :visible="dialogVisible" :memberId="props.row.id" :name="props.row.name"
+          :phone="props.row.phone" :email="props.row.email" :gender="props.row.gender" :idNo="props.row.idNo"
+          :canIntroduce="props.row.canIntroduce" :isVip="props.row.isVip" :comment="props.row.comment"
+          @update:visible="dialogVisible = $event" @submit="updateCLient">
+        </UpdateMemberDialog>
         <el-button type="danger" round @click="deleteClient(props.row.id)">刪除用戶</el-button>
         <div m="4">
           <!-- <p m="t-0 b-2">State: {{ props.row.state }}</p>
@@ -34,7 +39,7 @@
     <el-table-column label="name" prop="name" />
     <el-table-column label="phone" prop="phone" />
     <el-table-column label="email" prop="email" />
-    <el-table-column label="gender" prop="gender" />
+    <el-table-column label="gender" prop="gender" :formatter="formatGender" />
     <el-table-column label="birthday" prop="birthday" />
     <el-table-column label="idNo" prop="idNo" />
     <el-table-column label="canIntroduce" prop="canIntroduce" />
@@ -57,7 +62,8 @@
 import { ref } from 'vue'
 import Swal from "sweetalert2";
 import axios from 'axios';
-import Dialog from '@/components/Dialog.vue';
+import CreateMemberDialog from '@/components/CreateMemberDialog.vue';
+import UpdateMemberDialog from '@/components/UpdateMemberDialog.vue';
 const clients_API = import.meta.env.VITE_API_URL_CLIENTS
 const client_API = import.meta.env.VITE_API_URL_CLIENT
 const parentBorder = ref(false)
@@ -68,9 +74,6 @@ const loadCount = ref(10); //單頁筆數
 const totalCount = ref(0); //總共比數
 const pageSizes = ref([10, 20, 50, 100]); //選單筆數
 const dialogVisible = ref(false)
-
-
-
 const loadMember = async () => {
   try {
     // 顯示加載提示
@@ -162,6 +165,8 @@ const createClient = async (formData) => {
     const birth = convertUTCDateToLocalDate(formData.birthday).replace(/\s+/g, '').slice(0, 10);
     formData.birthday = birth;
     formData.gender = parseInt(formData.gender);
+    console.log(typeof (formData.gender))
+
     Swal.fire({
       title: 'Loading...',
       text: '請稍候',
@@ -213,7 +218,50 @@ const createClient = async (formData) => {
     });
   }
 }
-const updateCLient = async () => {
+const updateCLient = async (formData) => {
+  console.log('提交的資料:', formData); // 確認接收到的資料
+  try {
+    formData.gender = formData.gender === true ? 1 : 0;
+    Swal.fire({
+      title: 'Loading...',
+      text: '請稍候',
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      allowOutsideClick: false, // 禁止外部點擊關閉
+    });
+
+    const response = await axios({
+      method: 'put',
+      url: `/${formData.number}`,
+      baseURL: client_API,
+      data: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    // 成功提交後顯示成功提示
+    Swal.fire({
+      icon: 'success',
+      title: '修改成功',
+      text: '用戶資料已修改',
+    }).then(() => {
+      // 在視窗關閉後執行 loadMember()
+      loadMember();
+    });
+    // 可選：關閉對話框或其他後續處理
+    // dialogVisible.value = false;
+
+  } catch (error) {
+    console.error('提交失敗:', error);
+
+    // 顯示錯誤提示
+    Swal.fire({
+      icon: 'error',
+      title: '提交失敗',
+      text: '請檢查您的輸入並重試。',
+    });
+  }
 }
 
 
@@ -235,7 +283,9 @@ function convertUTCDateToLocalDate(utcDateStr) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}
   -${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
-
+const formatGender = (row) => {
+  return row.gender === true ? '男' : '女';
+};
 // const get_Image_Upload_API = "https://metadata.moaifamily.io/client/1/image?fileName=test1/test2.json"
 // const createdAt = ref()
 // const updatedAt = ref()

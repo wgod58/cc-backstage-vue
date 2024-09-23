@@ -2,7 +2,7 @@
     <el-button class="dialog" type="info" plain @click="dialogFormVisible = true">
         新增用戶
     </el-button>
-    <el-dialog v-model="dialogFormVisible" title="新增用戶" width="500">
+    <el-dialog v-model="dialogFormVisible" title="新增用戶" width="500" @close="closeDialog">
         <el-form :model="form">
             <el-form-item label="姓名" :label-width="formLabelWidth">
                 <el-input v-model="form.name" autocomplete="off" />
@@ -18,12 +18,14 @@
             </el-form-item>
             <el-form-item label="性別" :label-width="formLabelWidth">
                 <el-select v-model="form.gender" placeholder="Please select a zone">
-                    <el-option label="男生" value="1" />
-                    <el-option label="女生" value="0" />
+                    <el-option label="男生" value='1' />
+                    <el-option label="女生" value='0' />
                 </el-select>
             </el-form-item>
+
             <el-form-item label="生日" :label-width="formLabelWidth">
-                <el-date-picker v-model="form.birthday" type="date" placeholder="Pick a day" />
+                <el-date-picker v-model="form.birthday" type="date" placeholder="選擇生日" :disabled-date="disableBefore18"
+                    :default-value="new Date(2000, 0)" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -63,10 +65,13 @@ const visible = computed({
     }
 })
 
+
 const closeDialog = () => {
     dialogFormVisible.value = false
+    Object.keys(form).forEach(key => {
+        form[key] = ''; // 清空屬性值
+    });
 }
-
 const handleClick = () => {
     console.log(form)
     emit('submit', { ...form }) // 觸發提交事件
@@ -82,6 +87,12 @@ const resetForm = () => {
     form.birthday = ''
     form.idNo = ''
 }
+const disableBefore18 = (date) => {
+    const today = new Date();
+    const age18 = new Date(today.setFullYear(today.getFullYear() - 18));
+    return date > age18; // 返回 true 表示該日期不可選擇
+}
+
 </script>
 
 <style scoped>
