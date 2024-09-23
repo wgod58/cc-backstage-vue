@@ -2,6 +2,9 @@
         <div class="container">
                 <form>
                         <div class="login">
+                                <div class="hint" style="text-align: center;margin-bottom: 10px;">
+                                        <b style="color: red;">{{ hint }}</b>
+                                </div>
                                 帳號：
                                 <el-input v-model="account" style="margin-bottom: 10px; width: 240px"
                                         placeholder="請輸入帳號" />
@@ -16,17 +19,25 @@
         </div>
 </template>
 
-<script lang="ts" setup>
-import router from "@/router";
-import { ref } from "vue";
-const account = ref("account");
-const password = ref("password");
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/router'; // 导入登录函数
+
+const account = ref('');
+const password = ref('');
+const router = useRouter();
+const hint = ref('');
+
 const loginCheck = () => {
-        if (account.value === "account" && password.value === "password") {
-                console.log("LoginSuccess");
-                router.push("/");
+        // 简单的登录验证
+        if (account.value === 'account' && password.value === 'password') {
+                console.log('LoginSuccess');
+                login(); // 更新登录状态
+                router.push('/home'); // 跳转到首页
         } else {
-                console.log("LoginFailed");
+                hint.value = "帳號密碼錯誤";
+                console.log('LoginFailed');
         }
 };
 </script>

@@ -28,7 +28,7 @@
           <el-menu-item index="1-4-1">item one</el-menu-item>
         </el-sub-menu>
       </el-sub-menu> -->
-      <RouterLink to="/">
+      <RouterLink to="/clients">
       <el-menu-item index="1">
         <el-icon><Avatar /></el-icon>
         <template #title>ClientsData</template>

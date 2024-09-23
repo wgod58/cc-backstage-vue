@@ -5,27 +5,29 @@ import Sidebar from '../components/Sidebar.vue'
 
 <template>
   <div class="container">
-  <div class="sidebar">
-    <Sidebar></Sidebar>
+    <div class="sidebar">
+      <Sidebar></Sidebar>
+    </div>
+    <div class="routerview">
+      <RouterView></RouterView>
+    </div>
   </div>
-  <div class="routerview">
-    <RouterView></RouterView>
-  </div>
-</div>
 </template>
 
 <style>
-*{
+* {
   margin: 0;
   padding: 0;
 }
-.container{
+
+.container {
   display: flex;
   height: 100vh;
 }
-.sidebar{
-}
-.routerview{
+
+.sidebar {}
+
+.routerview {
   flex-grow: 1;
   padding: 20px;
   background-color: #ADADAD;
