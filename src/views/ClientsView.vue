@@ -57,7 +57,6 @@
 import { ref } from 'vue'
 import Swal from "sweetalert2";
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import Dialog from '@/components/Dialog.vue';
 const clients_API = import.meta.env.VITE_API_URL_CLIENTS
 const client_API = import.meta.env.VITE_API_URL_CLIENT
