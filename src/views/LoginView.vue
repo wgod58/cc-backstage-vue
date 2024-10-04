@@ -31,7 +31,7 @@ const hint = ref('');
 
 const loginCheck = () => {
         // 简单的登录验证
-        if (account.value === 'account' && password.value === 'password') {
+        if (account.value === 'loveydovey' && password.value === '10090127') {
                 console.log('LoginSuccess');
                 login(); // 更新登录状态
                 router.push('/home'); // 跳转到首页
